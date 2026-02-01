@@ -23,6 +23,7 @@ export const flashcardQuerySchema = z.object({
    */
   limit: z
     .string()
+    .refine((val) => /^\d+$/.test(val), "Limit must be a valid integer")
     .transform((val) => parseInt(val, 10))
     .pipe(z.number().int().min(1, "Limit must be at least 1").max(500, "Limit cannot exceed 500"))
     .optional()
@@ -34,6 +35,7 @@ export const flashcardQuerySchema = z.object({
    */
   offset: z
     .string()
+    .refine((val) => /^\d+$/.test(val), "Offset must be a valid integer")
     .transform((val) => parseInt(val, 10))
     .pipe(z.number().int().min(0, "Offset cannot be negative"))
     .optional()
@@ -69,13 +71,19 @@ export type FlashcardQuerySchemaOutput = z.output<typeof flashcardQuerySchema>;
  * @throws ZodError if validation fails
  */
 export function parseFlashcardQueryParams(searchParams: URLSearchParams): FlashcardQuerySchemaOutput {
+  // Helper to convert empty strings to undefined
+  const getParam = (key: string): string | undefined => {
+    const value = searchParams.get(key);
+    return value === "" ? undefined : value ?? undefined;
+  };
+
   const rawParams = {
-    source: searchParams.get("source") ?? undefined,
-    search: searchParams.get("search") ?? undefined,
-    limit: searchParams.get("limit") ?? undefined,
-    offset: searchParams.get("offset") ?? undefined,
-    sort: searchParams.get("sort") ?? undefined,
-    order: searchParams.get("order") ?? undefined,
+    source: getParam("source"),
+    search: getParam("search"),
+    limit: getParam("limit"),
+    offset: getParam("offset"),
+    sort: getParam("sort"),
+    order: getParam("order"),
   };
 
   return flashcardQuerySchema.parse(rawParams);
