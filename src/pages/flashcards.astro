@@ -1,0 +1,12 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { FlashcardList } from "../components/flashcards/FlashcardList";
+---
+
+<Layout title="My Flashcards | FiszkiAI">
+  <main class="min-h-screen bg-background">
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
+      <FlashcardList client:load />
+    </div>
+  </main>
+</Layout>

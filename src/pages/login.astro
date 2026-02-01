@@ -1,0 +1,10 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { LoginForm } from "../components/auth/LoginForm";
+---
+
+<Layout title="Login | FiszkiAI">
+  <main class="min-h-screen bg-background flex items-center justify-center p-4">
+    <LoginForm client:load />
+  </main>
+</Layout>
